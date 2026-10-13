@@ -57,6 +57,7 @@ label { display: block; font-weight: 600; font-size: .92rem; }
 input, select, textarea {
   display: block; width: 100%; margin-top: .3rem;
   font: inherit; font-weight: 400; color: var(--ink);
+  font-size: 16px;            /* minimaal 16px, anders zoomt de iPhone in bij aantikken */
   background: var(--card); border: 1.5px solid var(--line); border-radius: 10px;
   padding: .7rem .8rem; min-height: var(--field-h);
 }
