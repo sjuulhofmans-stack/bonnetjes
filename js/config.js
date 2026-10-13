@@ -9,10 +9,10 @@
 // =====================================================================
 window.APP_CONFIG = {
   // Supabase → Project Settings → Data API → Project URL
-  SUPABASE_URL: '',
+  SUPABASE_URL: 'https://dluuwvotaslkukrtcylq.supabase.co',
 
   // Supabase → Project Settings → API Keys → "anon" / "publishable" key
-  SUPABASE_ANON_KEY: '',
+  SUPABASE_ANON_KEY: 'sb_publishable_T0Hv81aEamxdU9M_Cff9Zw_oLOpe7K1',
 
   // Inloggen met alleen een gebruikersnaam? Dan wordt dit erachter geplakt.
   // Voorbeeld: gebruikersnaam "marieke" → marieke@bonnetjes.app
