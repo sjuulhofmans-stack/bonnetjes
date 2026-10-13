@@ -71,10 +71,18 @@ select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%236b7477' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right .7rem center; background-size: 18px;
 }
-/* iPhone: datumvelden houden anders hun eigen (lagere) hoogte aan */
+/* iPhone: datumvelden hebben een eigen hoogte en zetten de datum in het midden en te hoog.
+   Hier links en verticaal gecentreerd, net als de andere velden. */
 @supports (-webkit-touch-callout: none) {
-  input[type="date"], input[type="month"] { -webkit-appearance: none; appearance: none; text-align: left; }
+  input[type="date"], input[type="month"] {
+    -webkit-appearance: none; appearance: none; text-align: left;
+    line-height: calc(var(--field-h) - 3px);   /* 3px = boven- en onderrand */
+  }
+  input[type="date"]::-webkit-date-and-time-value,
+  input[type="month"]::-webkit-date-and-time-value { text-align: left; margin: 0; line-height: inherit; }
 }
+/* Android/Chrome: datum netjes verticaal in het midden */
+input[type="date"]::-webkit-datetime-edit, input[type="month"]::-webkit-datetime-edit { padding: 0; line-height: 1.2; }
 input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
 input[type="checkbox"], input[type="radio"] { width: auto; min-height: 0; display: inline; margin: 0; }
 textarea { resize: vertical; }
