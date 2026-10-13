@@ -99,8 +99,14 @@ function showLogin(message) {
   $('login-pass').value = '';
 }
 
+function toggleMenu(open) {
+  $('menu').hidden = !open;
+  $('menu-btn').setAttribute('aria-expanded', String(open));
+}
+
 async function logout(automatic = false) {
   Idle.stop();
+  toggleMenu(false);
   closeModal();
   await Api.signOut();
   state.user = null;
@@ -877,7 +883,11 @@ function bindEvents() {
       btn.disabled = false;
     }
   });
-  $('logout-btn').addEventListener('click', () => logout(false));
+  // Menu rechtsboven: openen/sluiten; tik ergens anders of Escape sluit het
+  $('menu-btn').addEventListener('click', e => { e.stopPropagation(); toggleMenu($('menu').hidden); });
+  document.addEventListener('click', e => { if (!$('menu').hidden && !e.target.closest('#menu')) toggleMenu(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('menu').hidden) toggleMenu(false); });
+  $('logout-btn').addEventListener('click', () => { toggleMenu(false); logout(false); });
 
   document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => setTab(t.dataset.tab)));
 

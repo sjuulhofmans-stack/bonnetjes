@@ -145,16 +145,36 @@ textarea { resize: vertical; }
 .brand img { flex: none; width: 30px; height: 30px; background: #fff; border-radius: 50%; padding: 2px; }
 .brand-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 @media (max-width: 560px) {
-  .user-label { display: none; }
   /* Telefoon: naam schaalt mee met de schermbreedte, zodat hij volledig past */
   .topbar { padding-left: .75rem; padding-right: .75rem; }
-  .brand { font-size: clamp(.78rem, 3.7vw, 1.05rem); gap: .4rem; }
+  .brand { font-size: clamp(.78rem, 4.1vw, 1.05rem); gap: .4rem; }
   .brand img { width: 26px; height: 26px; }
-  .topbar .btn.small { padding: .35rem .6rem; font-size: .82rem; min-height: 34px; }
 }
-.topbar-right { display: flex; align-items: center; gap: .6rem; min-width: 0; }
-.user-label { font-size: .85rem; opacity: .9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 40vw; }
-.topbar .btn.ghost { color: var(--primary-ink); border-color: rgba(255, 255, 255, .45); }
+
+/* Menu rechtsboven (☰): uitloggen zit hierachter, zodat je er niet per ongeluk op tikt */
+.topbar-right { position: relative; flex: none; }
+.menu-btn {
+  display: grid; place-items: center; width: 40px; height: 40px; padding: 0; cursor: pointer;
+  background: transparent; color: var(--primary-ink); border: 1.5px solid rgba(255, 255, 255, .45); border-radius: 10px;
+  -webkit-tap-highlight-color: transparent;
+}
+.menu-btn[aria-expanded="true"] { background: rgba(255, 255, 255, .2); }
+.menu-btn svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.menu {
+  position: absolute; right: 0; top: calc(100% + .5rem); z-index: 30; min-width: 230px; max-width: calc(100vw - 1.5rem);
+  background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .18); padding: .4rem; animation: menu-in .12s ease-out;
+}
+@keyframes menu-in { from { transform: translateY(-6px); opacity: 0; } }
+.menu-user { padding: .6rem .7rem .7rem; font-size: .82rem; color: var(--muted); border-bottom: 1px solid var(--line); margin-bottom: .3rem; }
+.menu-user strong { display: block; color: var(--ink); font-size: .95rem; overflow-wrap: anywhere; }
+.menu-item {
+  display: block; width: 100%; min-height: 44px; padding: .6rem .7rem; text-align: left; cursor: pointer;
+  font: inherit; font-weight: 600; background: none; border: 0; border-radius: 8px; color: var(--ink);
+}
+.menu-item:hover, .menu-item:focus-visible { background: var(--primary-softer); outline: none; }
+.menu-item.danger { color: var(--danger); }
+.menu-item.danger:hover, .menu-item.danger:focus-visible { background: var(--danger-soft); }
 .idle-warning { background: var(--warn-bg); color: var(--warn-ink); padding: .6rem 1rem; text-align: center; font-weight: 600; font-size: .9rem; }
 
 .tabs {
