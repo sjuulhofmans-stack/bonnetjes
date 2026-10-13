@@ -76,10 +76,10 @@ select {
 @supports (-webkit-touch-callout: none) {
   input[type="date"], input[type="month"] {
     -webkit-appearance: none; appearance: none; text-align: left;
-    line-height: calc(var(--field-h) - 3px);   /* 3px = boven- en onderrand */
+    display: flex; align-items: center;        /* zet de datum verticaal in het midden */
   }
   input[type="date"]::-webkit-date-and-time-value,
-  input[type="month"]::-webkit-date-and-time-value { text-align: left; margin: 0; line-height: inherit; }
+  input[type="month"]::-webkit-date-and-time-value { text-align: left; margin: 0; }
 }
 /* Android/Chrome: datum netjes verticaal in het midden */
 input[type="date"]::-webkit-datetime-edit, input[type="month"]::-webkit-datetime-edit { padding: 0; line-height: 1.2; }
