@@ -50,6 +50,7 @@ h3 { font-size: 1.05rem; }
 .muted { color: var(--muted); }
 .small { font-size: .85rem; }
 .empty { color: var(--muted); text-align: center; padding: 1rem .5rem; margin: 0; }
+.chip-grid > .empty, .client-grid > .empty { grid-column: 1 / -1; }  /* volle breedte, niet in één vakje */
 
 /* ===== Formulieren ===== */
 label { display: block; font-weight: 600; font-size: .92rem; }
