@@ -11,7 +11,7 @@
   <link rel="icon" href="img/mark.png" type="image/png">
   <link rel="apple-touch-icon" href="img/icon-180.png">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="css/style.css?v=13">
+  <link rel="stylesheet" href="css/style.css?v=14">
 </head>
 <body>
 
@@ -62,8 +62,8 @@
 
         <div class="step">
           <div class="step-label"><span class="step-nr">1</span> Cliënt</div>
-          <input id="nb-client-filter" type="search" placeholder="Zoek cliënt…" autocomplete="off">
-          <div id="nb-client-grid" class="chip-grid"></div>
+          <select id="nb-client" aria-label="Cliënt"></select>
+          <p id="nb-client-empty" class="empty" hidden>Nog geen cliënten. <button type="button" class="link" data-goto="clienten">Voeg eerst cliënten toe</button>.</p>
         </div>
 
         <div class="step">
@@ -208,10 +208,10 @@
 <script src="vendor/supabase-2.45.4.js"></script>
 <script src="vendor/jspdf-2.5.2.min.js"></script>
 <script src="vendor/jspdf-autotable-3.8.4.min.js"></script>
-<script src="js/config.js?v=13"></script>
-<script src="js/util.js?v=13"></script>
-<script src="js/api.js?v=13"></script>
-<script src="js/pdf.js?v=13"></script>
-<script src="js/app.js?v=13"></script>
+<script src="js/config.js?v=14"></script>
+<script src="js/util.js?v=14"></script>
+<script src="js/api.js?v=14"></script>
+<script src="js/pdf.js?v=14"></script>
+<script src="js/app.js?v=14"></script>
 </body>
 </html>

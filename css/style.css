@@ -50,7 +50,7 @@ h3 { font-size: 1.05rem; }
 .muted { color: var(--muted); }
 .small { font-size: .85rem; }
 .empty { color: var(--muted); text-align: center; padding: 1rem .5rem; margin: 0; }
-.chip-grid > .empty, .client-grid > .empty { grid-column: 1 / -1; }  /* volle breedte, niet in één vakje */
+.client-grid > .empty { grid-column: 1 / -1; }  /* volle breedte, niet in één vakje */
 
 /* ===== Formulieren ===== */
 label { display: block; font-weight: 600; font-size: .92rem; }
@@ -200,15 +200,6 @@ textarea { resize: vertical; }
 .name-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: .75rem; }
 .two-col label .step-label { margin-bottom: 0; }
 
-.chip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: .5rem; margin-top: .6rem; max-height: 290px; overflow-y: auto; padding: 2px; }
-.chip {
-  font: inherit; font-weight: 600; text-align: left; cursor: pointer;
-  border: 1.5px solid var(--line); background: var(--card); color: var(--ink);
-  border-radius: 10px; padding: .7rem .75rem; min-height: 48px;
-  -webkit-tap-highlight-color: transparent;
-}
-.chip.selected { background: var(--primary); border-color: var(--primary); color: var(--primary-ink); }
-.chip.selected .badge { background: rgba(255, 255, 255, .25); color: inherit; }
 
 .photo-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
 .photo-btn { flex-direction: column; min-height: 92px; font-size: 1rem; }

@@ -162,7 +162,7 @@ function upsertClient(c) {
 function clientName(id) { return state.clientsById.get(id)?.name || '(verwijderde cliënt)'; }
 
 function renderAll() {
-  renderClientChips();
+  renderClientSelect();
   renderRecent();
   renderDescSuggestions();
   fillClientSelects();
@@ -242,27 +242,19 @@ function emptyState(text) { return `<p class="empty">${esc(text)}</p>`; }
 // =====================================================================
 //  Tabblad: Nieuw bonnetje
 // =====================================================================
-function renderClientChips() {
-  const q = norm($('nb-client-filter').value);
+// Keuzelijst met actieve cliënten bij "Nieuw bonnetje".
+function renderClientSelect() {
   const active = state.clients.filter(c => c.active);
-  const list = active.filter(c => !q || norm(`${c.name} ${c.client_number || ''}`).includes(q));
-  if (!active.length) {
-    $('nb-client-grid').innerHTML = `<p class="empty">Nog geen cliënten. <button type="button" class="link" data-goto="clienten">Voeg eerst cliënten toe</button>.</p>`;
-    return;
-  }
-  if (!list.length) {
-    $('nb-client-grid').innerHTML = emptyState('Geen cliënt gevonden.');
-    return;
-  }
-  $('nb-client-grid').innerHTML = list.map(c => `
-    <button type="button" class="chip${c.id === state.selectedClientId ? ' selected' : ''}" data-pick-client="${esc(c.id)}">
-      ${esc(c.name)}${c.has_guardian ? ' <span class="badge">B</span>' : ''}
-    </button>`).join('');
+  if (!active.some(c => c.id === state.selectedClientId)) state.selectedClientId = null;
+  $('nb-client').hidden = !active.length;
+  $('nb-client-empty').hidden = !!active.length;
+  $('nb-client').innerHTML = `<option value="">Kies een cliënt…</option>`
+    + active.map(c => `<option value="${esc(c.id)}"${c.id === state.selectedClientId ? ' selected' : ''}>${esc(c.name)}</option>`).join('');
 }
 
 function selectClient(id) {
-  state.selectedClientId = id;
-  renderClientChips();
+  state.selectedClientId = id || null;
+  $('nb-client').value = id || '';
 }
 
 async function handlePhoto(file) {
@@ -296,13 +288,12 @@ function clearNewPhoto() {
 function resetNewForm() {
   clearNewPhoto();
   state.selectedClientId = null;
-  $('nb-client-filter').value = '';
+  $('nb-client').value = '';
   $('nb-amount').value = '';
   $('nb-desc').value = '';
   $('nb-date').value = todayISO();
   $('nb-date').max = todayISO();
   $('nb-error').hidden = true;
-  renderClientChips();
 }
 
 function formError(id, message) {
@@ -891,7 +882,11 @@ function bindEvents() {
   document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => setTab(t.dataset.tab)));
 
   // Nieuw bonnetje
-  $('nb-client-filter').addEventListener('input', renderClientChips);
+  $('nb-client').addEventListener('change', () => {
+    selectClient($('nb-client').value);
+    // Meteen door naar de foto, zodat je op de telefoon niet hoeft te scrollen.
+    if (state.selectedClientId && !state.newPhoto) $('nb-photo-buttons').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
   $('nb-camera').addEventListener('change', guard(e => handlePhoto(e.target.files[0])));
   $('nb-gallery').addEventListener('change', guard(e => handlePhoto(e.target.files[0])));
   $('nb-photo-remove').addEventListener('click', clearNewPhoto);
@@ -945,16 +940,10 @@ function bindEvents() {
 
   // Klikken op dynamische onderdelen (lijsten, kaarten, knoppen in het venster)
   document.addEventListener('click', e => {
-    const el = e.target.closest('[data-receipt-pdf],[data-act],[data-receipt],[data-client],[data-pick-client],[data-goto],[data-report-client]');
+    const el = e.target.closest('[data-receipt-pdf],[data-act],[data-receipt],[data-client],[data-goto],[data-report-client]');
     if (!el) return;
     const d = el.dataset;
     if (d.receiptPdf) { e.stopPropagation(); pdfSingle(d.receiptPdf); return; }
-    if (d.pickClient) {
-      selectClient(d.pickClient);
-      // Meteen door naar de foto, zodat je op de telefoon niet hoeft te scrollen.
-      if (!state.newPhoto) $('nb-photo-buttons').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      return;
-    }
     if (d.goto) return setTab(d.goto);
     if (d.client) return openClientCard(d.client);
     if (d.reportClient) { $('p-client').value = d.reportClient; return pdfClient(d.reportClient); }
