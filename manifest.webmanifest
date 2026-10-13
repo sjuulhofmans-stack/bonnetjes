@@ -1,10 +1,13 @@
 {
-  "name": "Bonnetjes",
-  "short_name": "Bonnetjes",
+  "name": "Hand in Hand administratie",
+  "short_name": "Hand in Hand",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f4f6f5",
-  "theme_color": "#0f766e",
-  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+  "background_color": "#f7f3ee",
+  "theme_color": "#23777e",
+  "icons": [
+    { "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
 }

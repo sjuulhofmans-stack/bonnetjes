@@ -1,4 +1,4 @@
-# Bonnetjes-app
+# Hand in Hand administratie (bonnetjes-app)
 
 Website waarmee een begeleider (werkt met ~20 cliënten met een verstandelijke beperking)
 voorgeschoten kosten vastlegt: cliënt kiezen → foto van bonnetje → bedrag → omschrijving →
@@ -19,7 +19,8 @@ uit**, en praat altijd Nederlands.
 | Bestand | Inhoud |
 |---|---|
 | `index.html` | alle schermen: inloggen, tabbladen Nieuw / Zoeken / Cliënten / Uitdraaien, venster (modal) |
-| `css/style.css` | opmaak; kleuren als variabelen bovenaan, ook dark mode |
+| `css/style.css` | opmaak; kleuren als variabelen bovenaan, ook dark mode. Huisstijl van handinhand-begeleiding.nl: turquoise `--primary`, koraal `--accent` (hoofdknoppen), Georgia voor koppen |
+| `img/` | logo (inlogscherm), `mark.png` (rondje, bovenbalk/favicon), app-iconen 180/192/512 |
 | `js/config.js` | Supabase URL + anon key, uitlogtijd (60 min) |
 | `js/util.js` | bedragen (in centen!), datums, `esc()` tegen XSS, foto verkleinen, toast |
 | `js/api.js` | `Api` object: Supabase-versie en demo-versie met dezelfde functies |
@@ -37,6 +38,11 @@ uit**, en praat altijd Nederlands.
 - Zet nooit de Supabase service_role key in de code.
 - Na een wijziging in `js/` of `css/`: verhoog het versienummer (`?v=2` → `?v=3`) achter
   alle eigen bestanden in `index.html`, anders laten browsers een oude kopie zien.
+
+## Online
+- Site: https://sjuulhofmans-stack.github.io/bonnetjes/ (GitHub Pages, repo `sjuulhofmans-stack/bonnetjes`)
+- Supabase-project `bonnetjes` (EU, Parijs); nieuwe aanmeldingen staan uit, gebruikers aanmaken via
+  Supabase → Authentication → Users (e-mail = `gebruikersnaam@bonnetjes.app`, Auto Confirm aan).
 
 ## Testen
 Open met de VS Code-extensie **Live Server** ("Go Live" rechtsonder), of

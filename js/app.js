@@ -183,18 +183,28 @@ function setTab(name) {
   if (name === 'uitdraaien') renderReport();
 }
 
+// Het venster krijgt een eigen stap in de browsergeschiedenis, zodat de
+// terugknop van een (Android-)telefoon het venster sluit in plaats van de app.
 function openModal(html) {
+  const wasOpen = !$('modal').hidden;
   $('modal-body').innerHTML = html;
   $('modal').hidden = false;
   document.body.classList.add('modal-open');
   $('modal').querySelector('.modal-box').scrollTop = 0;
   loadThumbs($('modal-body'));
+  if (!wasOpen) history.pushState({ modal: true }, '');
 }
 
-function closeModal() {
+function hideModal() {
   $('modal').hidden = true;
   $('modal-body').innerHTML = '';
   document.body.classList.remove('modal-open');
+}
+
+function closeModal() {
+  const wasOpen = !$('modal').hidden;
+  hideModal();
+  if (wasOpen && history.state?.modal) history.back();
 }
 
 // =====================================================================
@@ -267,6 +277,7 @@ async function handlePhoto(file) {
     $('nb-preview').querySelector('img').src = state.newPhotoUrl;
     $('nb-preview').hidden = false;
     $('nb-photo-buttons').hidden = true;
+    if (!$('nb-amount').value) $('nb-amount').focus();
   } finally {
     busy(false);
   }
@@ -290,6 +301,7 @@ function resetNewForm() {
   $('nb-amount').value = '';
   $('nb-desc').value = '';
   $('nb-date').value = todayISO();
+  $('nb-date').max = todayISO();
   $('nb-error').hidden = true;
   renderClientChips();
 }
@@ -925,8 +937,14 @@ function bindEvents() {
   $('p-client-btn').addEventListener('click', () => pdfClient());
   $('p-name').addEventListener('change', saveDisplayName);
 
-  // Venster sluiten
+  // Venster sluiten (ook met de terugknop van de telefoon)
   $('modal').addEventListener('click', e => { if (e.target.closest('[data-close]')) closeModal(); });
+  window.addEventListener('popstate', () => { if (!$('modal').hidden) hideModal(); });
+
+  // Telefoon: tabbalk verbergen zolang het toetsenbord open is
+  const typingField = 'input:not([type=checkbox]):not([type=radio]):not([type=file]), textarea';
+  document.addEventListener('focusin', e => { if (e.target.matches?.(typingField)) document.body.classList.add('typing'); });
+  document.addEventListener('focusout', () => document.body.classList.remove('typing'));
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('modal').hidden) closeModal(); });
 
   // Klikken op dynamische onderdelen (lijsten, kaarten, knoppen in het venster)
@@ -935,7 +953,12 @@ function bindEvents() {
     if (!el) return;
     const d = el.dataset;
     if (d.receiptPdf) { e.stopPropagation(); pdfSingle(d.receiptPdf); return; }
-    if (d.pickClient) return selectClient(d.pickClient);
+    if (d.pickClient) {
+      selectClient(d.pickClient);
+      // Meteen door naar de foto, zodat je op de telefoon niet hoeft te scrollen.
+      if (!state.newPhoto) $('nb-photo-buttons').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
     if (d.goto) return setTab(d.goto);
     if (d.client) return openClientCard(d.client);
     if (d.reportClient) { $('p-client').value = d.reportClient; return pdfClient(d.reportClient); }

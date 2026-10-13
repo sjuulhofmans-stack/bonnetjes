@@ -1,14 +1,17 @@
-/* ===== Kleuren en maten ===== */
+/* ===== Kleuren en maten (huisstijl Hand in Hand: turquoise + koraal) ===== */
 :root {
-  --bg: #f4f6f5;
+  --bg: #f7f3ee;
   --card: #ffffff;
-  --ink: #1f2937;
-  --muted: #6b7280;
-  --line: #e5e7eb;
-  --primary: #0f766e;
+  --ink: #344044;
+  --heading: #3e3a39;
+  --muted: #6b7477;
+  --line: #e8e2da;
+  --primary: #23777e;
   --primary-ink: #ffffff;
-  --primary-soft: #ccebe6;
-  --primary-softer: #ecf7f5;
+  --primary-soft: #cdeef0;
+  --primary-softer: #eef8f9;
+  --accent: #e7604c;          /* koraal: de belangrijkste knoppen */
+  --accent-ink: #ffffff;
   --danger: #be123c;
   --danger-soft: #ffe4e6;
   --warn-bg: #fef3c7;
@@ -20,8 +23,9 @@
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #111716; --card: #1a2221; --ink: #e5ece9; --muted: #9aa7a3; --line: #2b3533;
-    --primary: #2dd4bf; --primary-ink: #052e2b; --primary-soft: #134e48; --primary-softer: #17302d;
+    --bg: #121819; --card: #1b2324; --ink: #e5ecec; --heading: #f1eeea; --muted: #9aa8aa; --line: #2c3637;
+    --primary: #6fc7cd; --primary-ink: #0b2e31; --primary-soft: #1d4a4e; --primary-softer: #183235;
+    --accent: #ef7563; --accent-ink: #2a0d08;
     --danger: #fb7185; --danger-soft: #3b1720; --warn-bg: #3a2d0c; --warn-ink: #fcd34d;
     --shadow: none; color-scheme: dark;
   }
@@ -37,7 +41,8 @@ body {
   font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 body.modal-open { overflow: hidden; }
-h1, h2, h3 { margin: 0 0 .6rem; line-height: 1.2; }
+h1, h2, h3 { margin: 0 0 .6rem; line-height: 1.2; color: var(--heading); }
+h1, h2 { font-family: Georgia, "Times New Roman", serif; }
 h2 { font-size: 1.25rem; }
 h3 { font-size: 1.05rem; }
 .muted { color: var(--muted); }
@@ -76,7 +81,7 @@ textarea { resize: vertical; }
 }
 .btn:active { transform: scale(.98); }
 .btn:disabled { opacity: .5; cursor: default; transform: none; }
-.btn.primary { background: var(--primary); color: var(--primary-ink); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); }
 .btn.secondary { background: var(--card); border-color: var(--primary-soft); color: var(--primary); }
 .btn.ghost { background: transparent; color: var(--muted); border-color: var(--line); }
 .btn.danger { background: var(--danger-soft); color: var(--danger); }
@@ -96,7 +101,8 @@ textarea { resize: vertical; }
 .login-card label { text-align: left; }
 .login-card h1 { margin: 0; }
 .login-card p { margin: 0; }
-.login-logo { width: 64px; height: 64px; margin: 0 auto; }
+.login-logo { width: 100%; max-width: 260px; height: auto; margin: 0 auto; }
+.login-card h1 { font-size: 1.45rem; }
 .demo-note, .demo-banner { background: var(--warn-bg); color: var(--warn-ink); border-radius: 10px; padding: .55rem .8rem; font-size: .88rem; }
 .demo-banner { border-radius: 0; text-align: center; }
 
@@ -107,8 +113,10 @@ textarea { resize: vertical; }
   background: var(--primary); color: var(--primary-ink);
   padding: .6rem 1rem; padding-top: calc(.6rem + env(safe-area-inset-top));
 }
-.brand { display: flex; align-items: center; gap: .5rem; font-weight: 800; font-size: 1.1rem; }
-.brand img { width: 28px; height: 28px; }
+.brand { display: flex; align-items: center; gap: .5rem; font-weight: 800; font-size: 1.05rem; min-width: 0; }
+.brand img { flex: none; width: 30px; height: 30px; background: #fff; border-radius: 50%; padding: 2px; }
+.brand-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 560px) { .user-label { display: none; } }
 .topbar-right { display: flex; align-items: center; gap: .6rem; min-width: 0; }
 .user-label { font-size: .85rem; opacity: .9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 40vw; }
 .topbar .btn.ghost { color: var(--primary-ink); border-color: rgba(255, 255, 255, .45); }
@@ -126,7 +134,8 @@ textarea { resize: vertical; }
   font: inherit; font-size: .78rem; font-weight: 600; cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.tab .ico { font-size: 1.35rem; line-height: 1; }
+.tab .ico { line-height: 0; }
+.tab .ico svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .tab.active { color: var(--primary); }
 .tab.active .ico { background: var(--primary-soft); border-radius: 999px; padding: 2px 16px; }
 
@@ -143,6 +152,10 @@ textarea { resize: vertical; }
   .tab.active { border-bottom-color: var(--primary); }
   .tab.active .ico { background: none; padding: 0; }
   .content { padding-bottom: 3rem; }
+}
+/* Telefoon: tabbalk weg tijdens typen, anders schuift hij over het invoerveld heen */
+@media (max-width: 759px) {
+  body.typing .tabs { display: none; }
 }
 
 /* ===== Kaarten ===== */
@@ -291,7 +304,7 @@ textarea { resize: vertical; }
 .toast {
   position: fixed; left: 50%; bottom: calc(var(--tabbar-h) + 1rem + env(safe-area-inset-bottom)); z-index: 70;
   transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
-  background: #134e48; color: #fff; padding: .75rem 1.1rem; border-radius: 12px; font-weight: 600;
+  background: #1d5a60; color: #fff; padding: .75rem 1.1rem; border-radius: 12px; font-weight: 600;
   max-width: calc(100% - 2rem); box-shadow: 0 8px 24px rgba(0, 0, 0, .2); transition: .2s;
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }

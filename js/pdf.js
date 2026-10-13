@@ -4,7 +4,7 @@ const PDF = (() => {
   const PAGE_W = 210, PAGE_H = 297, M = 16;            // A4 in millimeters, marge
   const CONTENT_W = PAGE_W - 2 * M;
   const BOTTOM = PAGE_H - 18;
-  const TEAL = [15, 118, 110], TEAL_LIGHT = [204, 235, 230], INK = [31, 41, 55], MUTED = [107, 114, 128];
+  const TEAL = [35, 119, 126], TEAL_LIGHT = [205, 238, 240], INK = [52, 64, 68], MUTED = [107, 116, 119];
 
   function newDoc() {
     const doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', compress: true });
