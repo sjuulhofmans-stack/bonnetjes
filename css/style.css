@@ -34,7 +34,8 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { -webkit-text-size-adjust: 100%; }
+/* Altijd ruimte voor de scrollbalk, zodat de kolom op elk tabblad op dezelfde plek staat */
+html { -webkit-text-size-adjust: 100%; overflow-y: scroll; scrollbar-gutter: stable; }
 body {
   margin: 0;
   background: var(--bg);
