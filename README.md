@@ -126,3 +126,11 @@ vendor/               meegeleverde bibliotheken (supabase-js, jsPDF, autotable)
 ```
 
 Lokaal testen: `python3 -m http.server` in deze map, en dan naar http://localhost:8000.
+
+## Werken in VS Code
+
+1. Pak de zip uit in een map, bijvoorbeeld `Documenten/bonnetjes`.
+2. Open VS Code → *File → Open Folder…* → kies die map.
+3. VS Code stelt de extensie **Live Server** voor. Installeer die.
+4. Klik rechtsonder op **Go Live**: de site opent in je browser en ververst vanzelf zodra je iets opslaat.
+5. Met Claude Code in VS Code kun je verder bouwen; `CLAUDE.md` vertelt Claude hoe het project in elkaar zit.
