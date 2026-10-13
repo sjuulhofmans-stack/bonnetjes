@@ -163,7 +163,6 @@ function clientName(id) { return state.clientsById.get(id)?.name || '(verwijderd
 
 function renderAll() {
   renderClientChips();
-  renderMonthStrip();
   renderRecent();
   renderDescSuggestions();
   fillClientSelects();
@@ -353,25 +352,11 @@ async function saveNewReceipt(e) {
 }
 
 function renderAfterReceiptChange() {
-  renderMonthStrip();
   renderRecent();
   renderDescSuggestions();
   renderSearch();
   renderClients();
   renderReport();
-}
-
-function renderMonthStrip() {
-  const ym = currentMonth();
-  const prev = (() => {
-    const [y, m] = ym.split('-').map(Number);
-    return m === 1 ? `${y - 1}-12` : `${y}-${pad2(m - 1)}`;
-  })();
-  const inMonth = month => state.receipts.filter(r => r.receipt_date.startsWith(month));
-  const cur = inMonth(ym), old = inMonth(prev);
-  $('month-strip').innerHTML = `
-    <div><span class="muted">${esc(monthLabel(ym))}</span><strong>${fmtEUR(sumCents(cur))}</strong><span class="muted">${cur.length} bonnetjes</span></div>
-    <div><span class="muted">${esc(monthLabel(prev))}</span><strong>${fmtEUR(sumCents(old))}</strong><span class="muted">${old.length} bonnetjes</span></div>`;
 }
 
 function renderRecent() {

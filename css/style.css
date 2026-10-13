@@ -190,12 +190,6 @@ textarea { resize: vertical; }
 .card-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .6rem; }
 .card-head h2 { margin: 0; }
 
-.month-strip { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1rem; }
-.month-strip > div { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: .75rem .9rem; display: grid; }
-.month-strip > div:first-child { background: var(--primary); color: var(--primary-ink); }
-.month-strip > div:first-child .muted { color: inherit; opacity: .85; }
-.month-strip strong { font-size: 1.35rem; }
-.month-strip .muted { font-size: .82rem; }
 
 /* ===== Nieuw bonnetje ===== */
 .step { margin: 1.1rem 0; }
