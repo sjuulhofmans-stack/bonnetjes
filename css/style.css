@@ -144,7 +144,14 @@ textarea { resize: vertical; }
 .brand { display: flex; align-items: center; gap: .5rem; font-weight: 800; font-size: 1.05rem; min-width: 0; }
 .brand img { flex: none; width: 30px; height: 30px; background: #fff; border-radius: 50%; padding: 2px; }
 .brand-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-@media (max-width: 560px) { .user-label { display: none; } }
+@media (max-width: 560px) {
+  .user-label { display: none; }
+  /* Telefoon: naam schaalt mee met de schermbreedte, zodat hij volledig past */
+  .topbar { padding-left: .75rem; padding-right: .75rem; }
+  .brand { font-size: clamp(.78rem, 3.7vw, 1.05rem); gap: .4rem; }
+  .brand img { width: 26px; height: 26px; }
+  .topbar .btn.small { padding: .35rem .6rem; font-size: .82rem; min-height: 34px; }
+}
 .topbar-right { display: flex; align-items: center; gap: .6rem; min-width: 0; }
 .user-label { font-size: .85rem; opacity: .9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 40vw; }
 .topbar .btn.ghost { color: var(--primary-ink); border-color: rgba(255, 255, 255, .45); }
