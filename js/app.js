@@ -517,29 +517,43 @@ function openClientCard(id) {
     </div>`);
 }
 
+// "J. Bakker" → { initials: "J.", lastName: "Bakker" } (voorletters bevatten geen spaties)
+function splitName(name) {
+  const m = String(name || '').trim().match(/^(\S+)\s+(.+)$/);
+  return m ? { initials: m[1], lastName: m[2] } : { initials: '', lastName: String(name || '').trim() };
+}
+
+// "jp" / "J. P." / "j.p" → "J.P."  (al getypte punten, zoals "Th.", blijven staan)
+function formatInitials(text) {
+  const s = String(text || '').replace(/\s+/g, '');
+  if (s.includes('.')) {
+    const parts = s.split('.').map(p => p.replace(/[^\p{L}]/gu, '')).filter(Boolean);
+    return parts.map(p => p[0].toUpperCase() + p.slice(1).toLowerCase()).join('.') + (parts.length ? '.' : '');
+  }
+  const letters = [...s.replace(/[^\p{L}]/gu, '')];
+  return letters.length ? letters.map(l => l.toUpperCase()).join('.') + '.' : '';
+}
+
+// Volgend vrij cliëntnummer: hoogste bestaande + 1, beginnend bij 1001.
+function nextClientNumber() {
+  const nums = state.clients.map(c => parseInt(c.client_number, 10)).filter(Number.isFinite);
+  return String(Math.max(1000, ...nums) + 1);
+}
+
 function openClientForm(c = null) {
-  const v = c || { name: '', client_number: '', has_guardian: false, guardian_name: '', guardian_contact: '', notes: '' };
+  const v = splitName(c?.name);
   openModal(`
     <form id="client-form" class="stack" novalidate>
       <h2>${c ? 'Cliënt wijzigen' : 'Nieuwe cliënt'}</h2>
-      <label>Naam <span class="muted small">(voorletter + achternaam)</span>
-        <input name="name" value="${esc(v.name)}" placeholder="bv. J. Bakker" maxlength="120" required autocomplete="off">
-      </label>
-      <label>Cliëntnummer <span class="muted small">(optioneel)</span>
-        <input name="client_number" value="${esc(v.client_number || '')}" autocomplete="off">
-      </label>
-      <label class="check"><input type="checkbox" name="has_guardian"${v.has_guardian ? ' checked' : ''}> Staat onder bewind</label>
-      <div class="guardian-fields"${v.has_guardian ? '' : ' hidden'}>
-        <label>Bewindvoerder / kantoor
-          <input name="guardian_name" value="${esc(v.guardian_name || '')}" autocomplete="off">
+      <div class="name-row">
+        <label>Voorletter(s)
+          <input name="initials" value="${esc(v.initials)}" placeholder="bv. J." maxlength="12" required autocomplete="off">
         </label>
-        <label>Contact bewindvoerder <span class="muted small">(e-mail of telefoon)</span>
-          <input name="guardian_contact" value="${esc(v.guardian_contact || '')}" autocomplete="off">
+        <label>Achternaam
+          <input name="last_name" value="${esc(v.lastName)}" placeholder="bv. Bakker" maxlength="100" required autocomplete="off">
         </label>
       </div>
-      <label>Notities <span class="muted small">(optioneel, alleen voor jezelf)</span>
-        <textarea name="notes" rows="3">${esc(v.notes || '')}</textarea>
-      </label>
+      ${c?.client_number ? `<p class="muted small">Cliëntnummer: ${esc(c.client_number)}</p>` : ''}
       <p id="client-form-error" class="form-error" hidden></p>
       <div class="btn-row">
         <button class="btn primary" type="submit">Opslaan</button>
@@ -547,21 +561,18 @@ function openClientForm(c = null) {
       </div>
     </form>`);
   const form = $('client-form');
-  form.has_guardian.addEventListener('change', () => {
-    form.querySelector('.guardian-fields').hidden = !form.has_guardian.checked;
-  });
+  form.initials.addEventListener('blur', () => { form.initials.value = formatInitials(form.initials.value); });
   form.addEventListener('submit', guard(async e => {
     e.preventDefault();
+    const initials = formatInitials(form.initials.value);
+    const lastName = form.last_name.value.trim().replace(/\s+/g, ' ');
+    form.initials.value = initials;
+    if (!formError('client-form-error', !initials ? 'Vul de voorletter(s) in.' : !lastName ? 'Vul de achternaam in.' : null)) return;
     const data = {
       ...(c || {}),
-      name: form.name.value.trim().replace(/\s+/g, ' '),
-      client_number: form.client_number.value.trim(),
-      has_guardian: form.has_guardian.checked,
-      guardian_name: form.has_guardian.checked ? form.guardian_name.value.trim() : '',
-      guardian_contact: form.has_guardian.checked ? form.guardian_contact.value.trim() : '',
-      notes: form.notes.value.trim(),
+      name: `${initials} ${lastName}`,
+      client_number: c?.client_number || nextClientNumber(),
     };
-    if (!formError('client-form-error', data.name ? null : 'Vul een naam in.')) return;
     const dup = state.clients.find(x => x.id !== data.id && norm(x.name) === norm(data.name));
     if (dup && !confirm(`Er is al een cliënt "${dup.name}". Toch opslaan?`)) return;
     busy(true);
@@ -569,13 +580,13 @@ function openClientForm(c = null) {
       const saved = await Api.saveClient(data);
       upsertClient(saved);
       renderAll();
-      toast(c ? 'Cliënt bijgewerkt' : `${saved.name} toegevoegd`);
+      toast(c ? 'Cliënt bijgewerkt' : `${saved.name} toegevoegd (nr. ${saved.client_number})`);
       openClientCard(saved.id);
     } finally {
       busy(false);
     }
   }));
-  form.name.focus();
+  form.initials.focus();
 }
 
 async function toggleArchive(id) {

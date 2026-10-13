@@ -32,7 +32,10 @@ uit**, en praat altijd Nederlands.
 ## Afspraken
 - Gebruikersinvoer altijd via `esc()` in HTML zetten.
 - Geld rekenen in centen (`toCents`, `sumCents`, `fmtEUR`).
-- Cliëntnamen als voorletter + achternaam (privacy/AVG).
+- Cliëntnamen als voorletter + achternaam (privacy/AVG). Formulier heeft twee velden
+  (voorletters + achternaam); opgeslagen als één `name` ("J.P. de Vries"), `splitName()` splitst bij wijzigen.
+- Cliëntnummer wordt automatisch toegekend (`nextClientNumber()`: hoogste + 1, vanaf 1001); geen invulveld.
+- Bewind- en notitievelden staan nog in de database, maar niet meer in het formulier.
 - Nieuwe databasevelden: toevoegen in `schema.sql` (met `alter table ... add column if not exists`)
   én in `CLIENT_FIELDS` / `RECEIPT_FIELDS` in `js/api.js`.
 - Zet nooit de Supabase service_role key in de code.
