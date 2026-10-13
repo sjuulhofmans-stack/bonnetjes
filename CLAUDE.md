@@ -35,6 +35,8 @@ uit**, en praat altijd Nederlands.
 - Nieuwe databasevelden: toevoegen in `schema.sql` (met `alter table ... add column if not exists`)
   én in `CLIENT_FIELDS` / `RECEIPT_FIELDS` in `js/api.js`.
 - Zet nooit de Supabase service_role key in de code.
+- Na een wijziging in `js/` of `css/`: verhoog het versienummer (`?v=2` → `?v=3`) achter
+  alle eigen bestanden in `index.html`, anders laten browsers een oude kopie zien.
 
 ## Testen
 Open met de VS Code-extensie **Live Server** ("Go Live" rechtsonder), of
