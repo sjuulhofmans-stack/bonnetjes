@@ -302,10 +302,10 @@ textarea { resize: vertical; }
 @media (max-width: 480px) { .inline-action { grid-template-columns: 1fr; } }
 
 /* ===== Venster ===== */
-.modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: end center; }
+.modal { position: fixed; inset: 0; z-index: 50; display: grid; grid-template-rows: minmax(0, 1fr); place-items: end center; }
 .modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, .45); }
 .modal-box {
-  position: relative; width: 100%; max-width: 620px; max-height: 92vh; max-height: 92dvh; overflow-y: auto;
+  position: relative; width: 100%; max-width: 620px; max-height: 92%; overflow-y: auto;  /* 92% van de zichtbare ruimte */
   background: var(--card); border-radius: 20px 20px 0 0; padding: 1.4rem 1.2rem calc(1.4rem + env(safe-area-inset-bottom));
   animation: slide-up .18s ease-out;
 }

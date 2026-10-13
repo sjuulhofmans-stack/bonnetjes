@@ -191,8 +191,25 @@ function openModal(html) {
   document.body.classList.add('modal-open');
   $('modal').querySelector('.modal-box').scrollTop = 0;
   loadThumbs($('modal-body'));
+  fitModalToViewport();
   if (!wasOpen) history.pushState({ modal: true }, '');
 }
+
+// iPhone: het toetsenbord maakt de pagina niet kleiner, maar schuift eroverheen.
+// Daarom past het venster zich aan het écht zichtbare deel van het scherm aan,
+// zodat het met het toetsenbord mee omhoog schuift.
+function fitModalToViewport() {
+  const vv = window.visualViewport;
+  if (!vv || $('modal').hidden) return;
+  $('modal').style.top = `${vv.offsetTop}px`;
+  $('modal').style.height = `${vv.height}px`;
+  const field = document.activeElement;
+  if (field && $('modal').contains(field) && field.matches('input, textarea, select')) {
+    field.scrollIntoView({ block: 'nearest' });
+  }
+}
+window.visualViewport?.addEventListener('resize', fitModalToViewport);
+window.visualViewport?.addEventListener('scroll', fitModalToViewport);
 
 function hideModal() {
   $('modal').hidden = true;
