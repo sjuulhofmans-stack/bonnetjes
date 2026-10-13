@@ -19,6 +19,7 @@
   --radius: 14px;
   --shadow: 0 1px 2px rgba(0, 0, 0, .05), 0 4px 14px rgba(0, 0, 0, .04);
   --tabbar-h: 64px;
+  --field-h: 48px;            /* hoogte van álle invulvelden en keuzelijsten */
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -55,7 +56,22 @@ input, select, textarea {
   display: block; width: 100%; margin-top: .3rem;
   font: inherit; font-weight: 400; color: var(--ink);
   background: var(--card); border: 1.5px solid var(--line); border-radius: 10px;
-  padding: .7rem .8rem; min-height: 46px;
+  padding: .7rem .8rem; min-height: var(--field-h);
+}
+/* Eén vaste hoogte voor alle velden van één regel (niet voor notities/textarea) */
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select {
+  height: var(--field-h); padding-top: 0; padding-bottom: 0; line-height: normal;
+}
+input[type="search"] { -webkit-appearance: none; appearance: none; }
+/* Keuzelijst: overal hetzelfde pijltje in plaats van de eigen stijl van elke browser */
+select {
+  -webkit-appearance: none; appearance: none; padding-right: 2.2rem; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%236b7477' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right .7rem center; background-size: 18px;
+}
+/* iPhone: datumvelden houden anders hun eigen (lagere) hoogte aan */
+@supports (-webkit-touch-callout: none) {
+  input[type="date"], input[type="month"] { -webkit-appearance: none; appearance: none; text-align: left; }
 }
 input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
 input[type="checkbox"], input[type="radio"] { width: auto; min-height: 0; display: inline; margin: 0; }
@@ -64,11 +80,12 @@ textarea { resize: vertical; }
 .check input { width: 20px; height: 20px; accent-color: var(--primary); }
 .form-error { background: var(--danger-soft); color: var(--danger); padding: .6rem .8rem; border-radius: 10px; margin: .6rem 0; font-weight: 500; }
 
-.amount-field { display: flex; align-items: center; gap: .4rem; margin-top: .3rem;
-  border: 1.5px solid var(--line); border-radius: 10px; background: var(--card); padding-left: .8rem; }
+.amount-field { display: flex; align-items: center; gap: .4rem; margin-top: .3rem; height: var(--field-h);
+  border: 1.5px solid var(--line); border-radius: 10px; background: var(--card); padding-left: .8rem; overflow: hidden; }
 .amount-field:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
 .amount-field span { font-weight: 700; color: var(--muted); }
-.amount-field input { border: 0; margin: 0; box-shadow: none !important; font-size: 1.25rem; font-weight: 700; padding-left: 0; }
+.amount-field input { border: 0; margin: 0; box-shadow: none !important; font-size: 1.25rem; font-weight: 700; padding-left: 0;
+  height: 100%; min-height: 0; border-radius: 0; background: transparent; }
 
 /* ===== Knoppen ===== */
 .btn {
@@ -275,6 +292,7 @@ textarea { resize: vertical; }
 .pdf-actions { display: grid; gap: .75rem; }
 .inline-action { display: grid; grid-template-columns: 1fr auto; gap: .5rem; align-items: end; }
 .inline-action select { margin: 0; }
+.inline-action .btn { height: var(--field-h); }
 @media (max-width: 480px) { .inline-action { grid-template-columns: 1fr; } }
 
 /* ===== Venster ===== */
