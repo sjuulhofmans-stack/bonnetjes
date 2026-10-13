@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Bonnetjes">
+  <title>Bonnetjes</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ INLOGGEN ============ -->
+<main id="login-view" class="login-view" hidden>
+  <form id="login-form" class="login-card" autocomplete="on">
+    <img src="icon.svg" alt="" class="login-logo">
+    <h1>Bonnetjes</h1>
+    <p class="muted">Voorgeschoten kosten voor cliënten</p>
+    <label>Gebruikersnaam of e-mail
+      <input id="login-user" name="username" autocomplete="username" autocapitalize="none" required>
+    </label>
+    <label>Wachtwoord
+      <input id="login-pass" name="password" type="password" autocomplete="current-password" required>
+    </label>
+    <p id="login-error" class="form-error" hidden></p>
+    <button class="btn primary big" type="submit">Inloggen</button>
+    <p id="login-demo-note" class="demo-note" hidden>
+      Demo-modus: vul zelf iets in. Alles blijft alleen in deze browser.
+    </p>
+  </form>
+</main>
+
+<!-- ============ APP ============ -->
+<div id="app-view" hidden>
+  <header class="topbar">
+    <div class="brand"><img src="icon.svg" alt=""> Bonnetjes</div>
+    <div class="topbar-right">
+      <span id="user-label" class="user-label"></span>
+      <button id="logout-btn" class="btn ghost small" type="button">Uitloggen</button>
+    </div>
+  </header>
+  <div id="demo-banner" class="demo-banner" hidden>Demo-modus — gegevens blijven alleen in deze browser.</div>
+  <div id="idle-warning" class="idle-warning" hidden></div>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="nieuw" type="button"><span class="ico">＋</span><span>Nieuw</span></button>
+    <button class="tab" data-tab="zoeken" type="button"><span class="ico">⌕</span><span>Zoeken</span></button>
+    <button class="tab" data-tab="clienten" type="button"><span class="ico">☺</span><span>Cliënten</span></button>
+    <button class="tab" data-tab="uitdraaien" type="button"><span class="ico">⎙</span><span>Uitdraaien</span></button>
+  </nav>
+
+  <main class="content">
+
+    <!-- ---------- NIEUW BONNETJE ---------- -->
+    <section id="tab-nieuw" class="tab-panel">
+      <div id="month-strip" class="month-strip"></div>
+
+      <form id="new-form" class="card" novalidate>
+        <h2>Nieuw bonnetje</h2>
+
+        <div class="step">
+          <div class="step-label"><span class="step-nr">1</span> Cliënt</div>
+          <input id="nb-client-filter" type="search" placeholder="Zoek cliënt…" autocomplete="off">
+          <div id="nb-client-grid" class="chip-grid"></div>
+        </div>
+
+        <div class="step">
+          <div class="step-label"><span class="step-nr">2</span> Foto van het bonnetje</div>
+          <div class="photo-buttons" id="nb-photo-buttons">
+            <label class="btn photo-btn">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+              Foto maken
+              <input id="nb-camera" type="file" accept="image/*" capture="environment" hidden>
+            </label>
+            <label class="btn photo-btn secondary">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 17l5-5 4 4 2-2 3 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="9.5" r="1.5" fill="currentColor"/></svg>
+              Uit fotorol
+              <input id="nb-gallery" type="file" accept="image/*" hidden>
+            </label>
+          </div>
+          <div id="nb-preview" class="photo-preview" hidden>
+            <img alt="Voorbeeld van het bonnetje">
+            <button type="button" id="nb-photo-remove" class="btn ghost small">Andere foto</button>
+          </div>
+        </div>
+
+        <div class="step two-col">
+          <label><span class="step-label"><span class="step-nr">3</span> Bedrag</span>
+            <span class="amount-field"><span>€</span>
+              <input id="nb-amount" inputmode="decimal" placeholder="0,00" autocomplete="off">
+            </span>
+          </label>
+          <label><span class="step-label"><span class="step-nr">4</span> Datum</span>
+            <input id="nb-date" type="date">
+          </label>
+        </div>
+
+        <div class="step">
+          <label><span class="step-label"><span class="step-nr">5</span> Omschrijving</span>
+            <input id="nb-desc" list="desc-suggestions" maxlength="500" placeholder="bv. koffie en appeltaart bij de HEMA" autocomplete="off">
+          </label>
+          <datalist id="desc-suggestions"></datalist>
+        </div>
+
+        <p id="nb-error" class="form-error" hidden></p>
+        <button id="nb-save" class="btn primary huge" type="submit">Opslaan</button>
+      </form>
+
+      <div class="card">
+        <h3>Laatst toegevoegd</h3>
+        <div id="recent-list" class="receipt-list"></div>
+      </div>
+    </section>
+
+    <!-- ---------- ZOEKEN ---------- -->
+    <section id="tab-zoeken" class="tab-panel" hidden>
+      <div class="card">
+        <h2>Bonnetje zoeken</h2>
+        <input id="s-text" type="search" placeholder="Zoek op omschrijving, cliënt, bedrag of datum…" autocomplete="off">
+        <div class="filter-row">
+          <label>Cliënt<select id="s-client"></select></label>
+          <label>Vanaf<input id="s-from" type="date"></label>
+          <label>Tot en met<input id="s-to" type="date"></label>
+        </div>
+        <div class="filter-actions">
+          <button id="s-reset" class="btn ghost small" type="button">Filters wissen</button>
+        </div>
+      </div>
+      <div class="result-bar">
+        <span id="s-summary"></span>
+        <button id="s-pdf" class="btn secondary small" type="button">PDF van resultaten</button>
+      </div>
+      <div id="s-results" class="receipt-list"></div>
+      <button id="s-more" class="btn ghost" type="button" hidden>Meer tonen</button>
+    </section>
+
+    <!-- ---------- CLIËNTEN ---------- -->
+    <section id="tab-clienten" class="tab-panel" hidden>
+      <div class="card">
+        <div class="card-head">
+          <h2>Cliënten</h2>
+          <button id="c-add" class="btn primary small" type="button">+ Nieuwe cliënt</button>
+        </div>
+        <input id="c-filter" type="search" placeholder="Zoek cliënt…" autocomplete="off">
+        <label class="check"><input id="c-show-archived" type="checkbox"> Toon ook gearchiveerde cliënten</label>
+      </div>
+      <div id="c-grid" class="client-grid"></div>
+    </section>
+
+    <!-- ---------- UITDRAAIEN ---------- -->
+    <section id="tab-uitdraaien" class="tab-panel" hidden>
+      <div class="card">
+        <h2>Uitdraaien</h2>
+        <div class="segmented" role="radiogroup">
+          <label><input type="radio" name="p-mode" value="month" checked><span>Maand</span></label>
+          <label><input type="radio" name="p-mode" value="range"><span>Eigen periode</span></label>
+        </div>
+        <div id="p-month-row" class="filter-row">
+          <label>Maand<input id="p-month" type="month"></label>
+        </div>
+        <div id="p-range-row" class="filter-row" hidden>
+          <label>Vanaf<input id="p-from" type="date"></label>
+          <label>Tot en met<input id="p-to" type="date"></label>
+        </div>
+        <p class="muted small">Tip: "Eigen periode" is handig als een bewindvoerder met terugwerkende kracht om bonnetjes vraagt.</p>
+      </div>
+
+      <div id="p-summary" class="card summary-card"></div>
+
+      <div class="card">
+        <h3>PDF maken</h3>
+        <label class="check"><input id="p-photos" type="checkbox" checked> Foto's van de bonnetjes toevoegen</label>
+        <label class="name-field">Jouw naam op de uitdraai
+          <input id="p-name" placeholder="bv. M. de Boer" autocomplete="name">
+        </label>
+        <div class="pdf-actions">
+          <button id="p-total" class="btn primary big" type="button">Totaaloverzicht (alle cliënten)</button>
+          <div class="inline-action">
+            <select id="p-client"></select>
+            <button id="p-client-btn" class="btn secondary" type="button">PDF voor deze cliënt</button>
+          </div>
+        </div>
+        <p id="p-progress" class="muted small" hidden></p>
+      </div>
+
+      <div class="card">
+        <h3>Per bonnetje</h3>
+        <div id="p-list" class="receipt-list"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ============ VENSTER (klantenkaart, formulieren, foto) ============ -->
+<div id="modal" class="modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-box" role="dialog" aria-modal="true">
+    <button class="modal-close" type="button" data-close aria-label="Sluiten">×</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="loading" class="loading"><div class="spinner"></div></div>
+
+<script src="vendor/supabase-2.45.4.js"></script>
+<script src="vendor/jspdf-2.5.2.min.js"></script>
+<script src="vendor/jspdf-autotable-3.8.4.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/util.js"></script>
+<script src="js/api.js"></script>
+<script src="js/pdf.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
