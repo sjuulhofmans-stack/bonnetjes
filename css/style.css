@@ -302,20 +302,25 @@ textarea { resize: vertical; }
 @media (max-width: 480px) { .inline-action { grid-template-columns: 1fr; } }
 
 /* ===== Venster ===== */
-.modal { position: fixed; inset: 0; z-index: 50; display: grid; grid-template-rows: minmax(0, 1fr); place-items: end center; }
+/* Telefoon: venster begint bovenaan het scherm, zodat het toetsenbord (dat van onderen komt)
+   nooit over de invulvelden heen valt. Computer/tablet: midden in beeld. */
+.modal { position: fixed; inset: 0; z-index: 50; display: grid; grid-template-rows: minmax(0, 1fr); place-items: start center; }
 .modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, .45); }
 .modal-box {
-  position: relative; width: 100%; max-width: 620px; max-height: 92%; overflow-y: auto;  /* 92% van de zichtbare ruimte */
-  background: var(--card); border-radius: 20px 20px 0 0; padding: 1.4rem 1.2rem calc(1.4rem + env(safe-area-inset-bottom));
-  animation: slide-up .18s ease-out;
+  position: relative; width: 100%; max-width: 620px; max-height: 92%; overflow-y: auto;
+  background: var(--card); border-radius: 0 0 20px 20px;
+  padding: calc(1.4rem + env(safe-area-inset-top)) 1.2rem 1.4rem;
+  animation: slide-down .18s ease-out;
 }
+.modal-close { position: absolute; top: calc(.6rem + env(safe-area-inset-top)); right: .7rem; width: 40px; height: 40px; border: 0; border-radius: 50%;
+  background: var(--bg); color: var(--ink); font-size: 1.5rem; line-height: 1; cursor: pointer; }
 @media (min-width: 640px) {
   .modal { place-items: center; }
-  .modal-box { border-radius: 20px; }
+  .modal-box { border-radius: 20px; padding: 1.4rem 1.2rem; animation-name: slide-up; }
+  .modal-close { top: .6rem; }
 }
+@keyframes slide-down { from { transform: translateY(-30px); opacity: 0; } }
 @keyframes slide-up { from { transform: translateY(30px); opacity: 0; } }
-.modal-close { position: absolute; top: .6rem; right: .7rem; width: 40px; height: 40px; border: 0; border-radius: 50%;
-  background: var(--bg); color: var(--ink); font-size: 1.5rem; line-height: 1; cursor: pointer; }
 .stack { display: grid; gap: .9rem; }
 .stack h2 { padding-right: 2.5rem; }
 .stack-small { display: grid; gap: .4rem; }
